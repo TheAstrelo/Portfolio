@@ -1,16 +1,1236 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>James Freeborn — Full-Stack Engineer & Founder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>James Freeborn — Portfolio</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg-elevated: #111118;
+  --bg-card: #16161f;
+  --bg-card-hover: #1c1c28;
+  --border: rgba(255,255,255,0.06);
+  --border-hover: rgba(255,255,255,0.12);
+  --text-primary: #f0f0f5;
+  --text-secondary: rgba(240,240,245,0.55);
+  --text-tertiary: rgba(240,240,245,0.35);
+  --accent-blue: #4d8eff;
+  --accent-purple: #9d6dff;
+  --accent-teal: #2dd4a8;
+  --accent-rose: #ff6b9d;
+  --accent-amber: #ffb347;
+  --gradient-hero: linear-gradient(135deg, #4d8eff 0%, #9d6dff 50%, #ff6b9d 100%);
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Ambient gradient background */
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-gradient .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  animation: orbFloat 20s ease-in-out infinite;
+}
+
+.bg-gradient .orb-1 {
+  width: 600px; height: 600px;
+  background: var(--accent-blue);
+  top: -200px; right: -100px;
+  animation-delay: 0s;
+}
+
+.bg-gradient .orb-2 {
+  width: 500px; height: 500px;
+  background: var(--accent-purple);
+  bottom: -150px; left: -100px;
+  animation-delay: -7s;
+}
+
+.bg-gradient .orb-3 {
+  width: 400px; height: 400px;
+  background: var(--accent-teal);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: -14s;
+  opacity: 0.08;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.05); }
+  66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+/* Nav */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(10,10,15,0.7);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 1px solid var(--accent-teal);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-teal);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.nav-status::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: var(--accent-teal);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(45,212,168,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(45,212,168,0); }
+}
+
+.nav-status:hover {
+  background: rgba(45,212,168,0.1);
+}
+
+/* Content wrapper */
+.content { position: relative; z-index: 1; }
+
+/* HERO SECTION */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 140px 48px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-teal);
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.2s forwards;
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  max-width: 900px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s var(--ease-out-expo) 0.4s forwards;
+}
+
+.hero-headline .gradient-text {
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-headline em {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.hero-sub {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto 36px;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.6s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.8s forwards;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--border-hover);
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0%;
+  background: var(--gradient-hero);
+  opacity: 0.12;
+  transition: height 0.4s var(--ease-out-expo);
+}
+
+.btn-primary:hover::before { height: 100%; }
+.btn-primary:hover {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 20px rgba(77,142,255,0.1);
+  transform: translateY(-1px);
+}
+
+.btn-primary .btn-arrow {
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.btn-primary:hover .btn-arrow { transform: translateX(3px); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.btn-secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  background: rgba(255,255,255,0.03);
+}
+
+.btn-secondary .btn-arrow {
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.btn-secondary:hover .btn-arrow { transform: translateY(2px); }
+
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SECTION TITLES */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 36px;
+}
+
+.section-label::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-teal);
+  box-shadow: 0 0 12px rgba(45,212,168,0.4);
+}
+
+/* EXPERIENCE SECTION */
+.experience-section {
+  padding: 60px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.exp-narrative {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  line-height: 1.4;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin-bottom: 48px;
+  letter-spacing: -0.01em;
+}
+
+.exp-narrative strong {
+  color: var(--text-primary);
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  display: flex;
+  gap: 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+
+.timeline-progress {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--gradient-hero);
+  z-index: 1;
+  transition: width 1.5s var(--ease-out-expo);
+}
+
+.timeline.visible .timeline-progress {
+  width: 100%;
+}
+
+.timeline-item {
+  flex: 1 1 0%;
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  padding-top: 40px;
+}
+
+/* Accent tick mark on the timeline */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 2px;
+  height: 16px;
+  background: var(--border);
+  transition: background 0.5s var(--ease-out-expo), opacity 0.5s var(--ease-out-expo);
+  opacity: 0;
+  z-index: 3;
+}
+
+.timeline-item.active::before {
+  opacity: 1;
+}
+
+.timeline-item.active[data-accent="rose"]::before { background: var(--accent-rose); }
+.timeline-item.active[data-accent="purple"]::before { background: var(--accent-purple); }
+.timeline-item.active[data-accent="blue"]::before { background: var(--accent-blue); }
+.timeline-item.active[data-accent="teal"]::before { background: var(--accent-teal); }
+
+
+.timeline-content {
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  transition: all 0.5s var(--ease-out-expo);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.timeline-item.active .timeline-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.timeline-item.active:hover .timeline-content {
+  background: var(--bg-card);
+  border-color: var(--border);
+}
+
+.timeline-company {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+  transition: color 0.3s;
+}
+
+.timeline-role {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+.timeline-item[data-accent="amber"] .timeline-role { color: var(--accent-amber); }
+.timeline-item[data-accent="rose"] .timeline-role { color: var(--accent-rose); }
+.timeline-item[data-accent="purple"] .timeline-role { color: var(--accent-purple); }
+.timeline-item[data-accent="blue"] .timeline-role { color: var(--accent-blue); }
+.timeline-item[data-accent="teal"] .timeline-role { color: var(--accent-teal); }
+
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+}
+
+.timeline-stack {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  margin-top: 10px;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.timeline-item.active .timeline-stack { opacity: 0.6; }
+.timeline-item:hover .timeline-stack { opacity: 1; }
+
+.timeline-hint {
+  text-align: center;
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.tech-tag {
+  padding: 5px 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+/* EXPERIENCE MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5,5,10,0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-out-expo);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-overlay.active .modal {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  border-radius: 20px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 48px;
+  position: relative;
+  transform: translateY(20px) scale(0.97);
+  opacity: 0;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.modal::-webkit-scrollbar { width: 4px; }
+.modal::-webkit-scrollbar-track { background: transparent; }
+.modal::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 4px; }
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0;
+}
+
+.modal-close:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.06);
+}
+
+.modal-close svg { pointer-events: none; }
+
+.modal-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.modal-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-hover);
+}
+
+.modal-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+  filter: brightness(1.1);
+}
+
+/* White-background logos: blend with dark theme */
+.modal-logo.bhg img,
+.modal-logo.mpit img {
+  filter: brightness(1.1);
+  mix-blend-mode: screen;
+}
+
+.modal-logo.nasa img {
+  filter: brightness(1.15) drop-shadow(0 0 4px rgba(77,142,255,0.3));
+}
+
+.modal-logo.astrelo {
+  width: 72px;
+  height: 72px;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.modal-logo.astrelo:hover {
+  transform: scale(1.08);
+}
+
+.modal-logo.astrelo img {
+  filter: brightness(1.1);
+  mix-blend-mode: screen;
+  padding: 4px;
+}
+
+.modal-company {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+}
+
+.modal-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-role {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modal-role.blue { color: var(--accent-blue); }
+.modal-role.purple { color: var(--accent-purple); }
+.modal-role.teal { color: var(--accent-teal); }
+.modal-role.amber { color: var(--accent-amber); }
+.modal-role.rose { color: var(--accent-rose); }
+
+.modal-date {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.modal-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+
+.modal-heading {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.modal-body {
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+.modal-body strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.modal-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* FEATURED WORK */
+.work-section {
+  padding: 60px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Pipeline callout */
+.pipeline-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 44px;
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out-expo);
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 32px;
+}
+
+.pipeline-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gradient-hero);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.pipeline-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+}
+
+.pipeline-card:hover::before { opacity: 1; }
+
+.pipeline-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(77,142,255,0.1);
+  border: 1px solid rgba(77,142,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--accent-blue);
+}
+
+.pipeline-body { flex: 1; min-width: 0; }
+
+.pipeline-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  margin-bottom: 8px;
+}
+
+.pipeline-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.pipeline-desc {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+
+.pipeline-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pipeline-arrow {
+  align-self: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.pipeline-card:hover .pipeline-arrow {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+  transform: translateX(3px);
+}
+
+/* Side projects row */
+.side-projects {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.side-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  letter-spacing: 0.03em;
+  margin-right: 4px;
+}
+
+.side-link {
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out-expo);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.side-link:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.03);
+}
+
+.side-link svg {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.side-link:hover svg {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* CLOSING SECTION */
+.closing {
+  padding: 80px 48px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-top: 1px solid var(--border);
+}
+
+.closing-name {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.closing-line {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+.closing-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.closing-links a {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.3s;
+  letter-spacing: 0.02em;
+}
+
+.closing-links a:hover { color: var(--text-primary); }
+
+.closing-links .primary-link {
+  color: var(--text-primary);
+}
+
+.closing-links .primary-link:hover { color: var(--accent-blue); }
+
+.closing-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--border-hover);
+}
+
+/* FOOTER */
+footer {
+  padding: 40px 48px;
+  text-align: center;
+}
+
+footer p {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
+}
+
+/* REVEAL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.9s var(--ease-out-expo);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .hero { padding: 120px 24px 60px; }
+  .experience-section, .work-section, .closing { padding-left: 24px; padding-right: 24px; }
+  .timeline { flex-direction: column; align-items: flex-start; padding-left: 20px; }
+  .timeline::before { top: 0; bottom: 0; left: 27px; width: 2px; height: auto; right: auto; }
+  .timeline-progress { top: 0; left: 27px; width: 2px !important; height: 0; transition: height 1.5s var(--ease-out-expo); }
+  .timeline.visible .timeline-progress { height: 100%; width: 2px !important; }
+  .timeline-item { padding-top: 0; padding-left: 40px; padding-bottom: 16px; display: block; }
+  .timeline-item::before { top: 10px; left: 20px; width: 16px; height: 2px; }
+  .timeline-content { text-align: left; padding: 12px 16px; }
+  .pipeline-card { flex-direction: column; gap: 20px; padding: 32px; }
+  .pipeline-arrow { align-self: flex-end; }
+  .side-projects { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 600px) {
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .timeline-item { opacity: 1; }
+  .timeline-item .timeline-content { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-gradient">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<nav>
+  <a href="#" class="nav-logo">James Freeborn</a>
+  <a href="#contact" class="nav-status">Available</a>
+</nav>
+
+<div class="content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">// engineer turned founder</p>
+    <h1 class="hero-headline">
+      NASA engineer.<br>
+      Startup founder.<br>
+      <span class="gradient-text">Full-stack builder.</span>
+    </h1>
+    <p class="hero-sub">
+      5+ years shipping production systems — from flight software to AI tools.
+    </p>
+    <div class="hero-actions">
+      <a href="mailto:JimFreeborn@outlook.com" class="btn-primary">
+        Get in Touch
+        <svg class="btn-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="/James Freeborn Resume.pdf" class="btn-secondary" target="_blank" rel="noopener noreferrer">
+        Resume
+        <svg class="btn-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 3v8m0 0l-3-3m3 3l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="experience-section" id="experience">
+    <p class="exp-narrative reveal">From <strong>support tickets</strong> to <strong>database systems</strong> to <strong>NASA flight software</strong> — each role raised the stakes. Then I built my own.</p>
+    <div class="timeline reveal">
+      <div class="timeline-progress"></div>
+      <div class="timeline-item" data-accent="rose" data-key="bhg">
+        <div class="timeline-content">
+          <h3 class="timeline-company">BHG</h3>
+          <p class="timeline-role">Support Intern</p>
+          <span class="timeline-date">2020 — 2021</span>
+          <p class="timeline-stack">SQL · JIRA · Salesforce</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-accent="purple" data-key="mpit">
+        <div class="timeline-content">
+          <h3 class="timeline-company">MPIT</h3>
+          <p class="timeline-role">Database Administrator</p>
+          <span class="timeline-date">2022</span>
+          <p class="timeline-stack">SQL Server · T-SQL · Backups</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-accent="blue" data-key="nasa">
+        <div class="timeline-content">
+          <h3 class="timeline-company">NASA</h3>
+          <p class="timeline-role">Software Engineer</p>
+          <span class="timeline-date">2022 — Present</span>
+          <p class="timeline-stack">C# · .NET · Blazor · SQL</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-accent="teal" data-key="astrelo">
+        <div class="timeline-content">
+          <h3 class="timeline-company">Astrelo</h3>
+          <p class="timeline-role">Technical Founder</p>
+          <span class="timeline-date">Side Project</span>
+          <p class="timeline-stack">Next.js · PostgreSQL · AWS</p>
+        </div>
+      </div>
+    </div>
+    <p class="timeline-hint reveal">Click any role to see what I built →</p>
+  </section>
+
+  <!-- EXPERIENCE MODAL -->
+  <div class="modal-overlay" id="expModal">
+    <div class="modal">
+      <button class="modal-close" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="modal-top">
+        <div class="modal-logo" id="modalLogo"></div>
+        <h3 class="modal-company" id="modalCompany"></h3>
+      </div>
+      <div class="modal-meta">
+        <span class="modal-role" id="modalRole"></span>
+        <span class="modal-date" id="modalDate"></span>
+      </div>
+      <div class="modal-divider"></div>
+      <p class="modal-heading">What I Built</p>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-divider"></div>
+      <p class="modal-heading">Tech Stack</p>
+      <div class="modal-tags" id="modalTags"></div>
+    </div>
+  </div>
+
+  <!-- FEATURED WORK -->
+  <section class="work-section" id="work">
+    <div class="section-label reveal">Featured Work</div>
+    <a class="pipeline-card reveal" href="https://github.com/TheAstrelo/Claude-Pipeline" target="_blank" rel="noopener noreferrer">
+      <div class="pipeline-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pipeline-body">
+        <p class="pipeline-label">Open Source · The system that built Astrelo</p>
+        <h3 class="pipeline-name">Claude Code Auto-Pipeline</h3>
+        <p class="pipeline-desc">Automated CI/QA pipeline orchestrating 41 specialized AI agents across 12 phases (0–11). Memory-safe subprocess architecture — each phase forks an isolated process, solving a Bun runtime memory leak at 1.35GB RSS. Deterministic grep-based validators gate every phase (no AI self-assessment). Model routing reserves strong models for design/review only, cutting per-run cost 70% ($0.80→$0.20). Three risk profiles (yolo/standard/paranoid), adversarial review with auto-revision loops, drift detection, OWASP scanning, and a real-time WebSocket pixel-art visualization. Tool-agnostic across Claude Code, Cursor, Windsurf, Copilot, Cline, and Aider.</p>
+        <div class="pipeline-tags">
+          <span class="tech-tag">Shell</span>
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">WebSocket</span>
+          <span class="tech-tag">CI/CD</span>
+        </div>
+      </div>
+      <div class="pipeline-arrow">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><path d="M5 13L13 5M13 5H6M13 5V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </a>
+    <div class="side-projects reveal">
+      <span class="side-label">Other things I've built →</span>
+      <a class="side-link" href="https://apologie.band" target="_blank" rel="noopener noreferrer">
+        Apologie.Band
+        <svg width="12" height="12" viewBox="0 0 18 18" fill="none"><path d="M5 13L13 5M13 5H6M13 5V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing reveal" id="contact">
+    <h2 class="closing-name">James Freeborn</h2>
+    <p class="closing-line">Open to full-time and contract opportunities.</p>
+    <div class="closing-links">
+      <a href="mailto:JimFreeborn@outlook.com" class="primary-link">Get in Touch →</a>
+      <a href="/James Freeborn Resume.pdf" target="_blank" rel="noopener noreferrer">Resume ↓</a>
+      <span class="closing-divider"></span>
+      <a href="https://github.com/TheAstrelo" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/james-freeborn-242332239/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.astrelo.ai" target="_blank" rel="noopener noreferrer">astrelo.ai</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 James Freeborn</p>
+  </footer>
+
+</div>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+
+// Timeline progress animation with staggered dots
+const timeline = document.querySelector('.timeline');
+if (timeline) {
+  const tlObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+
+        const items = entry.target.querySelectorAll('.timeline-item');
+        items.forEach((item, i) => {
+          setTimeout(() => {
+            item.classList.add('active');
+          }, 400 + (i * 350));
+        });
+
+        tlObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  tlObserver.observe(timeline);
+}
+
+// Experience modal
+const expData = {
+  bhg: {
+    logo: '/BHG.png', logoClass: 'bhg', logoIsImage: true,
+    company: 'Bankers Healthcare Group', role: 'Application Support Intern', roleClass: 'rose',
+    date: 'May 2020 — Oct 2021',
+    body: `My first real exposure to production systems — as an intern, not a full-time analyst. I triaged production tickets through JIRA and Salesforce, communicated database transactions to DBAs, and ended up hitting the <strong>highest ticket completion rate company-wide in 2020</strong> — outperforming full-time analysts.<br><br>I led <strong>daily Scrum meetings</strong> to keep the team aligned and resolve blockers. This role taught me how production systems break and how to fix them under pressure.`,
+    tags: ['SQL Server', 'JIRA', 'Salesforce', 'Scrum']
+  },
+  mpit: {
+    logo: '/MPIT.png', logoClass: 'mpit', logoIsImage: true,
+    company: 'MPIT', role: 'Database Administrator', roleClass: 'purple',
+    date: 'Jan — Mar 2022',
+    body: `A short but focused stint that gave me a deep foundation in <strong>SQL Server</strong>. I learned database administration end-to-end: transactions, backup and recovery procedures, snapshots, and performance tuning.<br><br>I developed working expertise in <strong>Transact-SQL (T-SQL)</strong> for query optimization and scripting. This is where I went from "writing SQL" to actually understanding data infrastructure — the foundation everything at NASA would build on.`,
+    tags: ['SQL Server', 'T-SQL', 'Backup & Recovery', 'Database Administration']
+  },
+  nasa: {
+    logo: '/NASA.png', logoClass: 'nasa', logoIsImage: true,
+    company: 'NASA (SAIC Contract)', role: 'Software Engineer', roleClass: 'blue',
+    date: 'Jun 2022 — Present',
+    body: `Built the <strong>Engineering Work Order System</strong> for AFRC and JSC centers — replaced a manual SharePoint process with automated approval workflows, role-based authorization, inspector stamps, and digital signing.<br><br>Built <strong>FSA (Flight Scheduling Application)</strong> — used by <strong>every NASA center</strong> for pilot and astronaut scheduling. Timezone conversion, Teams calendar integration, pilot currency tracking with color-coded expirations, and PIF management.<br><br>Built a <strong>C# data migration tool</strong> to consolidate production data across multiple centers. These systems serve <strong>500+ engineers, schedulers, and flight operations staff</strong>.`,
+    tags: ['C#', '.NET', 'Blazor', 'SQL Server', 'SignalR', 'API Integration', 'Agile/Scrum']
+  },
+  astrelo: {
+    logo: '/Cosmo with Astrelo.jpg', logoClass: 'astrelo', logoIsImage: true, logoLink: 'https://www.astrelo.ai',
+    company: 'Astrelo', role: 'Technical Founder', roleClass: 'teal',
+    date: 'Side Project',
+    body: `An <strong>AI-Powered B2B Sales Intelligence Platform</strong> that analyzes closed deal patterns to score, prioritize, and automate outbound pipeline. Built end-to-end as a solo founder.<br><br>Core systems: <strong>ML Scoring Engine</strong> (NAICS embeddings, web signals), <strong>Cosmo AI Assistant</strong> (40+ tools, Groq/Llama 3), <strong>Real-Time Webhook Pipeline</strong> (12 trigger types, HubSpot/Salesforce integration), ML Prospect Discovery, and Coverage Intelligence.<br><br>Scale: <strong>68+ API endpoints</strong>, 56 database tables, 92 migrations, 15 EventBridge cron jobs. Built with <strong>Claude Code Auto-Pipeline</strong> — 41 AI agents across 12 phases with deterministic validators, model routing (70% cost cut), and OWASP security scanning. Currently in beta.`,
+    tags: ['Next.js', 'React', 'PostgreSQL', 'AWS', 'Upstash Redis', 'MUI v6', 'TanStack Query', 'JWT Auth']
+  }
+};
+
+const modal = document.getElementById('expModal');
+const modalClose = modal.querySelector('.modal-close');
+
+function openModal(key) {
+  const d = expData[key];
+  if (!d) return;
+  const logoEl = document.getElementById('modalLogo');
+  logoEl.className = 'modal-logo ' + d.logoClass;
+  if (d.logoIsImage) {
+    const img = `<img src="${d.logo}" alt="${d.company} logo">`;
+    logoEl.innerHTML = d.logoLink
+      ? `<a href="${d.logoLink}" target="_blank" rel="noopener noreferrer" style="display:flex;width:100%;height:100%">${img}</a>`
+      : img;
+  } else {
+    logoEl.textContent = d.logo;
+  }
+  document.getElementById('modalCompany').textContent = d.company;
+  document.getElementById('modalRole').textContent = d.role;
+  document.getElementById('modalRole').className = 'modal-role ' + d.roleClass;
+  document.getElementById('modalDate').textContent = d.date;
+  document.getElementById('modalBody').innerHTML = d.body;
+  document.getElementById('modalTags').innerHTML = d.tags.map(t => `<span class="tech-tag">${t}</span>`).join('');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.querySelectorAll('.timeline-item').forEach(item => {
+  item.addEventListener('click', () => openModal(item.dataset.key));
+});
+
+// Smooth scroll for nav
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+</script>
+
+</body>
 </html>
