@@ -227,31 +227,26 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 40px;
+  gap: 24px;
 }
 
-/* Two-column: intro left, company cards right */
-.hero__main {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 48px;
-  align-items: center;
-}
-
-/* Left column — intro */
-.hero__intro {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+/* Shared glass backdrop — wraps intro + cards as one surface */
+.hero__backdrop {
+  background: var(--glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 36px 40px 40px;
+  opacity: 0;
+  animation: glassReveal 0.7s var(--ease-glass) 0.1s both;
 }
 
 .hero__eyebrow {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 1.25rem;
-  opacity: 0;
-  animation: glassReveal 0.6s var(--ease-glass) 0.1s both;
+  gap: 12px;
+  margin-bottom: 28px;
 }
 
 .hero__eyebrow-text {
@@ -260,17 +255,31 @@
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Two-column grid inside the backdrop */
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Left column — intro */
+.hero__intro {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
 }
 
 .hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.5px;
-  margin-bottom: 1.25rem;
-  opacity: 0;
-  animation: glassReveal 0.7s var(--ease-glass) 0.2s both;
+  margin-bottom: 1.1rem;
 }
 
 .hero__title-setup {
@@ -289,13 +298,11 @@
 }
 
 .hero__sub {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 300;
   line-height: 1.75;
   color: var(--text-secondary);
-  margin-bottom: 1.5rem;
-  opacity: 0;
-  animation: glassReveal 0.7s var(--ease-glass) 0.35s both;
+  margin-bottom: 1.35rem;
 }
 
 .hero__sub strong {
@@ -318,16 +325,14 @@
 .hero__ctas {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  opacity: 0;
-  animation: glassReveal 0.7s var(--ease-glass) 0.5s both;
+  margin-bottom: 1.1rem;
 }
 
 .hero__btn {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.7rem 1.4rem;
+  padding: 0.65rem 1.3rem;
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 400;
@@ -347,7 +352,7 @@
 }
 
 .hero__btn--secondary {
-  background: var(--glass);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text-primary);
   border: 1px solid var(--glass-border-hover);
 }
@@ -361,8 +366,6 @@
 .hero__socials {
   display: flex;
   gap: 1.25rem;
-  opacity: 0;
-  animation: glassReveal 0.7s var(--ease-glass) 0.65s both;
 }
 
 .hero__social {
@@ -385,13 +388,11 @@
   fill: currentColor;
 }
 
-/* Right column — company cards */
+/* Right column — company cards (no extra glass since they nest in backdrop) */
 .hero__cards {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  opacity: 0;
-  animation: glassReveal 0.8s var(--ease-glass) 0.3s both;
+  gap: 12px;
 }
 
 /* Impact numbers strip at bottom of hero */
@@ -401,7 +402,7 @@
   gap: 16px;
   padding-bottom: 20px;
   opacity: 0;
-  animation: glassReveal 0.7s var(--ease-glass) 0.7s both;
+  animation: glassReveal 0.7s var(--ease-glass) 0.5s both;
 }
 
 /* ============================================
@@ -415,12 +416,10 @@
 
 .company-card {
   position: relative;
-  background: var(--glass);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 28px;
+  border-radius: 16px;
+  padding: 22px 24px;
   overflow: hidden;
   transition: all 0.45s var(--ease-glass);
 }
@@ -473,9 +472,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+/* Fallback letter style (Astrelo) */
+.company-card__letter {
   font-family: var(--font-display);
   font-size: 1.3rem;
   font-weight: 700;
+}
+
+/* SVG logo sizing inside icon */
+.company-card__icon svg {
+  flex-shrink: 0;
 }
 
 .company-card__icon--blue {
@@ -975,18 +984,18 @@
     min-height: auto;
   }
 
-  .hero__main {
+  .hero__backdrop {
+    padding: 28px 24px 32px;
+  }
+
+  .hero__grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 28px;
   }
 
   .hero__intro {
     text-align: center;
     align-items: center;
-  }
-
-  .hero__eyebrow {
-    justify-content: center;
   }
 
   .hero__ctas {
@@ -1071,12 +1080,7 @@
    REDUCED MOTION
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  .hero__eyebrow,
-  .hero__title,
-  .hero__sub,
-  .hero__ctas,
-  .hero__socials,
-  .hero__cards,
+  .hero__backdrop,
   .hero__impact {
     animation: none;
     opacity: 1;
