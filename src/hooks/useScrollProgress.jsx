@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 
 /**
- * Custom hook for tracking scroll progress
- * Demonstrates: useState, useEffect, event listeners, cleanup, performance optimization
+ * Custom hook for tracking scroll progress.
+ * Standalone alternative to Framer Motion's useScroll — demonstrates
+ * manual rAF throttling for high-frequency event handling.
+ * Currently unused (ScrollProgress component uses Framer Motion's useScroll),
+ * but kept to showcase the pattern.
  */
 export function useScrollProgress() {
   const [progress, setProgress] = useState(0);

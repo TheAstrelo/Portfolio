@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import FadeIn from './FadeIn';
 import { projects, projectCategories } from '../data/content';
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('All');
 
-  const filteredProjects = activeFilter === 'All'
-    ? projects
-    : projects.filter(project => project.category === activeFilter);
+  const filteredProjects = useMemo(
+    () => activeFilter === 'All'
+      ? projects
+      : projects.filter(project => project.category === activeFilter),
+    [activeFilter]
+  );
 
   return (
     <section id="projects" className="projects">

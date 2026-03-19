@@ -7,14 +7,120 @@ export const personalInfo = {
   initials: "JF",
   name: "James Freeborn",
   title: "Full-Stack Developer & AI Engineer",
+  headlineSetup: "From NASA missions to founding my own AI company —",
+  headlinePayoff: "I build software that has to work.",
   headline: "I build web applications and AI-powered developer tools.",
-  subtitle: "Full-stack engineer specializing in TypeScript, C#/.NET, and React. Currently focused on AI tooling that helps developers ship faster.",
+  subtitle: "Full-stack engineer with 3+ years specializing in TypeScript, C#/.NET, and React. Currently focused on AI tooling that helps developers ship faster.",
   email: "JimFreebron@outlook.com",
   github: "https://github.com/TheAstrelo",
   linkedin: "https://www.linkedin.com/in/james-freeborn-242332239/",
   resume: "/resume.pdf",
-  available: true // Set to false to hide availability badge
+  available: true,
+  previousEmployers: ["NASA", "ExxonMobil"],
+  astreloUrl: "https://www.astrelo.ai",
+  availabilitySubtitle: "Currently open to full-time and contract opportunities.",
 };
+
+// Hero stats displayed in the hero section
+export const heroStats = [
+  { value: "5+", label: "Years shipping" },
+  { value: "12", label: "Production apps" },
+  { value: "3", label: "AI tools launched" },
+];
+
+// Company/experience data for "Where I've Built" section
+export const companies = [
+  {
+    name: "NASA",
+    letter: "N",
+    role: "Software Engineer",
+    tenure: "2021 — 2023",
+    accent: "blue",
+    description: "Built mission-critical flight systems where failure isn't an option — it's a headline.",
+    tech: ["C#", ".NET", "SQL Server", "Azure DevOps"],
+  },
+  {
+    name: "ExxonMobil",
+    letter: "E",
+    role: "Full-Stack Developer",
+    tenure: "2023 — 2024",
+    accent: "rose",
+    description: "Delivered enterprise platforms at global scale — millions of data points, zero room for error.",
+    tech: ["React", "TypeScript", "Node.js", "PostgreSQL"],
+  },
+  {
+    name: "Astrelo",
+    letter: "A",
+    role: "Founder & Lead Engineer",
+    tenure: "2024 — Present",
+    accent: "purple",
+    description: "Founded an AI company in my spare time, because the standard I hold myself to doesn't clock out.",
+    tech: ["Next.js", "OpenAI API", "Vercel", "TypeScript"],
+  },
+];
+
+// Impact metrics
+export const impactMetrics = [
+  { value: "5+", label: "Years in Prod", gradient: "blue" },
+  { value: "12", label: "Shipped Products", gradient: "purple" },
+  { value: "3", label: "AI Tools Live", gradient: "rose" },
+  { value: "0", label: "Mission Failures", gradient: "green" },
+];
+
+// Featured Work (project rows)
+export const featuredWork = [
+  {
+    name: "Claude-Pipeline",
+    subtitle: "12-phase AI dev workflow with security audits & QA",
+    tech: ["Shell", "JavaScript", "Git"],
+    accent: "purple",
+    github: "https://github.com/TheAstrelo/Claude-Pipeline",
+  },
+  {
+    name: "Daily Briefing",
+    subtitle: "Personal dashboard with weather-reactive UI & 5 API integrations",
+    tech: ["React", "Next.js", "TypeScript", "Tailwind"],
+    accent: "blue",
+    github: "https://github.com/TheAstrelo/daily-briefing",
+  },
+  {
+    name: "MissionLog",
+    subtitle: "Enterprise work-order platform with real-time SignalR updates",
+    tech: ["C#", ".NET 8", "Blazor", "SQL Server"],
+    accent: "rose",
+    github: "https://github.com/TheAstrelo/MissionLog",
+  },
+  {
+    name: "RAG Document Engine",
+    subtitle: "AI-powered document search with vector embeddings",
+    tech: ["C#", ".NET", "LangChain", "Redis"],
+    accent: "green",
+  },
+];
+
+// Hero project cards with per-project stacks (kept for reference)
+export const heroProjects = [
+  {
+    name: "AI Code Reviewer",
+    coreTech: ["TypeScript", "Next.js", "OpenAI API"],
+    tech: ["PostgreSQL", "Vercel"],
+  },
+  {
+    name: "RAG Document Engine",
+    coreTech: ["C# / .NET", "LangChain"],
+    tech: ["Redis", "Azure", "Docker"],
+  },
+  {
+    name: "Dev Metrics Dashboard",
+    coreTech: ["React", "Node.js"],
+    tech: ["GraphQL", "PostgreSQL", "Docker"],
+  },
+  {
+    name: "FinTech Payments API",
+    coreTech: ["C# / .NET", "REST APIs"],
+    tech: ["Redis", "Azure", "CI/CD"],
+  },
+];
 
 // About section content
 export const aboutContent = {
@@ -67,9 +173,8 @@ export const techStack = {
 
 // Navigation links
 export const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
-  { label: "Stack", href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Work", href: "#work" },
   { label: "Contact", href: "#contact" }
 ];
 

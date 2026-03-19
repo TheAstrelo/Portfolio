@@ -1,42 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '../hooks';
 
 const FadeIn = ({ children, delay = 0, className = '' }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
-  }, []);
+  const prefersReducedMotion = useReducedMotion();
 
   return (
-    <div
-      ref={ref}
-      className={`fade-in ${isVisible ? 'visible' : ''} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+    <motion.div
+      className={className}
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '0px 0px -50px 0px' }}
+      transition={prefersReducedMotion
+        ? { duration: 0 }
+        : { duration: 0.5, ease: 'easeOut', delay: delay / 1000 }
+      }
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 
