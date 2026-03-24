@@ -926,16 +926,17 @@
 .footer__book-link {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--accent-purple);
   text-decoration: none;
-  padding: 4px 12px;
-  border: 1px solid var(--glass-border);
+  padding: 6px 14px;
+  border: 1px solid rgba(167, 139, 250, 0.25);
   border-radius: 999px;
+  background: rgba(167, 139, 250, 0.06);
   transition: all 0.3s var(--ease-glass);
 }
 
